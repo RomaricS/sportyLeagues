@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { LeagueService } from '../../services/league.service';
 import { LeagueCardComponent } from '../league-card/league-card.component';
 import { SeasonBadgeComponent } from '../season-badge/season-badge.component';
@@ -7,7 +7,8 @@ import { SeasonBadgeComponent } from '../season-badge/season-badge.component';
   selector: 'app-leagues-list',
   imports: [LeagueCardComponent, SeasonBadgeComponent],
   templateUrl: './leagues-list.component.html',
-  styleUrl: './leagues-list.component.scss'
+  styleUrl: './leagues-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LeaguesListComponent {
   private readonly leagueService = inject(LeagueService);

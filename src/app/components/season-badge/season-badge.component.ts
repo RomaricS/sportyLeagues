@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal, OnInit, DestroyRef } from '@angular/core';
+import { Component, inject, input, output, signal, OnInit, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LeagueService } from '../../services/league.service';
 import { Season } from '../../models/season.model';
@@ -8,6 +8,7 @@ import { Season } from '../../models/season.model';
   imports: [],
   templateUrl: './season-badge.component.html',
   styleUrl: './season-badge.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '(document:keydown.escape)': 'close.emit()',
     '[attr.role]': '"dialog"',

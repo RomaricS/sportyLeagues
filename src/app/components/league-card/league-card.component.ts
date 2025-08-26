@@ -1,4 +1,4 @@
-import { Component, input, output, inject } from '@angular/core';
+import { Component, input, output, inject, ChangeDetectionStrategy } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { League } from '../../models/league.model';
 
@@ -6,7 +6,8 @@ import { League } from '../../models/league.model';
   selector: 'app-league-card',
   imports: [],
   templateUrl: './league-card.component.html',
-  styleUrl: './league-card.component.scss'
+  styleUrl: './league-card.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LeagueCardComponent {
   private sanitizer = inject(DomSanitizer);
