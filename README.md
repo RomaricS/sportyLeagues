@@ -2,6 +2,8 @@
 
 A cutting-edge single-page application built with **Angular 20** showcasing sports leagues from around the world. Built with modern architectural patterns, performance optimizations, and enterprise-grade development practices.
 
+This project used Claude for the UI/UX part and theming, but also helped with code completion and documentation generation.
+
 ## 🚀 Live Demo
 
 Navigate to `http://localhost:4200/` after running the development server.
