@@ -1,11 +1,29 @@
-<div class="league-card" (click)="onLeagueClick()">
+<button 
+  class="league-card" 
+  (click)="onLeagueClick()"
+  [attr.aria-label]="'View season badges for ' + league().strLeague + ' (' + league().strSport + ')'"
+  type="button"
+>
   <div class="league-header">
-    <h3>{{ league().strLeague }}</h3>
-    <span class="sport-tag">{{ league().strSport }}</span>
+    <h3 [id]="'league-' + league().idLeague + '-title'">{{ league().strLeague }}</h3>
+    <span class="sport-tag" [attr.aria-label]="'Sport: ' + league().strSport">
+      <span [innerHTML]="getSportIcon(league().strSport)" class="sport-icon"></span>
+      {{ league().strSport }}
+    </span>
   </div>
   <div class="league-details">
-    @if (league().strLeagueAlternate) {
-      <p class="alternate-name">{{ league().strLeagueAlternate }}</p>
-    }
+    <p class="alternate-name" [attr.aria-label]="league().strLeagueAlternate ? 'Alternative name: ' + league().strLeagueAlternate : 'No alternative name'">
+      {{ league().strLeagueAlternate || '\u00A0' }}
+    </p>
   </div>
-</div>
+  <div 
+    [id]="'league-' + league().idLeague + '-description'"
+    class="visually-hidden"
+  >
+    {{ league().strLeague }} is a {{ league().strSport }} league. 
+    @if (league().strLeagueAlternate) {
+      Also known as {{ league().strLeagueAlternate }}.
+    }
+    Click to view season badges.
+  </div>
+</button>

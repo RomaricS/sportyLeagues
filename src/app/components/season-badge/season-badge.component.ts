@@ -1,4 +1,5 @@
-import { Component, inject, input, output, signal, effect } from '@angular/core';
+import { Component, inject, input, output, signal, OnInit, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LeagueService } from '../../services/league.service';
 import { Season } from '../../models/season.model';
 
@@ -6,32 +7,28 @@ import { Season } from '../../models/season.model';
   selector: 'app-season-badge',
   imports: [],
   templateUrl: './season-badge.component.html',
-  styleUrl: './season-badge.component.scss'
+  styleUrl: './season-badge.component.scss',
+  host: {
+    '(document:keydown.escape)': 'close.emit()',
+    '[attr.role]': '"dialog"',
+    '[attr.aria-modal]': 'true',
+    '[attr.aria-label]': '"Season badges modal"'
+  }
 })
-export class SeasonBadgeComponent {
+export class SeasonBadgeComponent implements OnInit {
   leagueId = input.required<string>();
   close = output();
 
   private readonly leagueService = inject(LeagueService);
-
+  private readonly destroyRef = inject(DestroyRef);
+  
   seasons = signal<Season[]>([]);
 
-  constructor() {
-    effect(() => {
-      const id = this.leagueId();
-      this.leagueService.getSeasonBadges(id).subscribe(seasons => {
+  ngOnInit() {
+    this.leagueService.getSeasonBadges(this.leagueId())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(seasons => {
         this.seasons.set(seasons);
       });
-    });
-  }
-
-  onBackdropClick(event: Event): void {
-    if (event.target === event.currentTarget) {
-      this.close.emit();
-    }
-  }
-
-  trackLeague(season: Season, index: number): string {
-    return `${season.strSeason}-${index}`;
   }
 }

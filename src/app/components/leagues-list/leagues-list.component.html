@@ -1,20 +1,35 @@
 <div class="leagues-container">
-  <div class="filters">
+  <header class="app-header">
+    <h1 class="app-title">
+      <span class="title-icon">🏆</span>
+      Sporty Leagues
+    </h1>
+    <p class="app-subtitle">Discover sports leagues from around the world</p>
+  </header>
+  
+  <div class="filters" role="search" aria-label="League filters">
     <div class="search-filter">
+      <label for="search-input" class="visually-hidden">Search leagues by name</label>
       <input
+        id="search-input"
         type="text"
         placeholder="Search leagues..."
         [value]="searchTerm()"
         (input)="onSearchChange($event)"
         class="search-input"
+        aria-label="Search leagues by name"
+        [attr.aria-describedby]="filteredLeagues().length > 0 ? 'search-results' : null"
       />
     </div>
 
     <div class="sport-filter">
+      <label for="sport-select" class="visually-hidden">Filter by sport type</label>
       <select
+        id="sport-select"
         [value]="selectedSport()"
         (change)="onSportChange($event)"
         class="sport-select"
+        aria-label="Filter leagues by sport type"
       >
         <option value="">All Sports</option>
         @for (sport of sports(); track sport) {
@@ -24,12 +39,65 @@
     </div>
   </div>
 
-  <div class="leagues-grid">
-    @for (league of filteredLeagues(); track league.idLeague) {
-    <app-league-card [league]="league" (leagueClick)="onLeagueClick($event)">
-    </app-league-card>
-    }
-  </div>
+  @if (filteredLeagues().length > 0) {
+    <div 
+      class="leagues-grid" 
+      role="grid" 
+      aria-label="Sports leagues"
+      [attr.aria-rowcount]="Math.ceil(filteredLeagues().length / 3)"
+    >
+      <div 
+        id="search-results" 
+        class="visually-hidden" 
+        aria-live="polite" 
+        aria-atomic="true"
+      >
+        {{ filteredLeagues().length }} league{{ filteredLeagues().length === 1 ? '' : 's' }} found
+      </div>
+
+      @for (league of filteredLeagues(); track league.idLeague; let i = $index) {
+      <div 
+        role="gridcell" 
+        [attr.aria-rowindex]="Math.floor(i / 3) + 1"
+        [attr.aria-colindex]="(i % 3) + 1"
+      >
+        <app-league-card 
+          [league]="league" 
+          (leagueClick)="onLeagueClick($event)"
+          [attr.aria-describedby]="'league-' + league.idLeague + '-description'"
+        >
+        </app-league-card>
+      </div>
+      }
+    </div>
+  } @else {
+    <div 
+      class="empty-state" 
+      role="status" 
+      aria-live="polite"
+    >
+      <div class="empty-content">
+        <h2>No leagues found</h2>
+        <p>
+          @if (searchTerm() || selectedSport()) {
+            Try adjusting your search or filters to find more leagues.
+          } @else {
+            No leagues are currently available.
+          }
+        </p>
+        @if (searchTerm() || selectedSport()) {
+          <button 
+            type="button" 
+            class="clear-filters-btn"
+            (click)="clearFilters()"
+            aria-label="Clear all filters to show all leagues"
+          >
+            Clear Filters
+          </button>
+        }
+      </div>
+    </div>
+  }
 
   @if (showSeasonBadge() && selectedLeagueId()) {
   <app-season-badge

@@ -1,26 +1,54 @@
-<div class="modal-backdrop" (click)="onBackdropClick($event)" onkeypress="">
-  <div class="modal-content">
+<div
+  class="modal-overlay"
+  (click)="close.emit()"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modal-title"
+  [attr.aria-describedby]="seasons().length > 0 ? 'modal-description' : 'no-badges-message'"
+>
+  <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
-      <h2>Season Badges</h2>
-      <button class="close-btn" (click)="close.emit()">&times;</button>
+      <h2 id="modal-title">Season Badges</h2>
+      <button
+        class="close-btn"
+        (click)="close.emit()"
+        type="button"
+        aria-label="Close season badges modal"
+        title="Close modal (ESC)"
+      >
+        &times;
+      </button>
     </div>
 
     <div class="modal-body">
-      @if (seasons()) {
-        @if (seasons().length > 0) {
-          <div class="badges-grid">
-            @for (season of seasons(); track trackLeague(season, $index)) {
-              <div class="badge-item">
-                <img [src]="season.strBadge" [alt]="season.strSeason + ' badge'" class="badge-img">
-                <p class="season-name">{{ season.strSeason }}</p>
-              </div>
-            }
-          </div>
-        } @else {
-          <p class="no-badges">No season badges available for this league.</p>
-        }
+      @if (seasons().length > 0) {
+        <div
+          id="modal-description"
+          class="visually-hidden"
+        >
+          Displaying {{ seasons().length }} season badge{{ seasons().length === 1 ? '' : 's' }}
+        </div>
+        <div class="badges-grid" role="list" aria-label="Season badges">
+          @for (season of seasons(); track season.strSeason + '-' + $index) {
+            <div class="badge-item" role="listitem">
+              <img
+                [src]="season.strBadge"
+                [alt]="'Badge for ' + season.strSeason + ' season'"
+                class="badge-img"
+                loading="lazy"
+              >
+              <p class="season-name">{{ season.strSeason }}</p>
+            </div>
+          }
+        </div>
       } @else {
-        <div class="loading">Loading season badges...</div>
+        <output
+          id="no-badges-message"
+          class="no-badges"
+          aria-live="polite"
+        >
+          No season badges available for this league.
+        </output>
       }
     </div>
   </div>

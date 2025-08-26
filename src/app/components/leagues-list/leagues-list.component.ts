@@ -1,6 +1,5 @@
-import { Component, inject, signal, computed, effect } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { LeagueService } from '../../services/league.service';
-import { League } from '../../models/league.model';
 import { LeagueCardComponent } from '../league-card/league-card.component';
 import { SeasonBadgeComponent } from '../season-badge/season-badge.component';
 
@@ -12,6 +11,9 @@ import { SeasonBadgeComponent } from '../season-badge/season-badge.component';
 })
 export class LeaguesListComponent {
   private readonly leagueService = inject(LeagueService);
+  
+  // Make Math available in template
+  readonly Math = Math;
 
   // Signal-based state
   searchTerm = signal('');
@@ -32,7 +34,7 @@ export class LeaguesListComponent {
     return leagues.filter(league => {
       const matchesSearch = !search ||
         league.strLeague.toLowerCase().includes(search) ||
-        (league.strLeagueAlternate && league.strLeagueAlternate.toLowerCase().includes(search));
+        league.strLeagueAlternate?.toLowerCase().includes(search);
 
       const matchesSport = !sport || league.strSport === sport;
 
@@ -58,5 +60,10 @@ export class LeaguesListComponent {
   onCloseSeasonBadge(): void {
     this.showSeasonBadge.set(false);
     this.selectedLeagueId.set(null);
+  }
+
+  clearFilters(): void {
+    this.searchTerm.set('');
+    this.selectedSport.set('');
   }
 }
