@@ -51,7 +51,7 @@ export class LeagueService {
     return this.getAllLeagues().pipe(
       map((leagues) => {
         const sports = leagues.map((league) => league.strSport);
-        return [...new Set(sports)].filter((sport) => sport).sort();
+        return [...new Set(sports)].filter((sport) => sport).sort((a, b) => a.localeCompare(b));
       })
     );
   }
