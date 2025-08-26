@@ -65,7 +65,13 @@
   .sport-icon {
     display: flex;
     align-items: center;
-    opacity: 0.9;
+    opacity: 1;
+    
+    svg {
+      filter: none !important;
+      fill: currentColor;
+      color: white;
+    }
   }
 }
 

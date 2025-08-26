@@ -25,7 +25,7 @@
     
     .title-icon {
       font-size: 3rem;
-      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
     @media (max-width: 768px) {
