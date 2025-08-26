@@ -1,0 +1,41 @@
+<div class="leagues-container">
+  <div class="filters">
+    <div class="search-filter">
+      <input
+        type="text"
+        placeholder="Search leagues..."
+        [value]="searchTerm()"
+        (input)="onSearchChange($event)"
+        class="search-input"
+      />
+    </div>
+
+    <div class="sport-filter">
+      <select
+        [value]="selectedSport()"
+        (change)="onSportChange($event)"
+        class="sport-select"
+      >
+        <option value="">All Sports</option>
+        @for (sport of sports(); track sport) {
+        <option [value]="sport">{{ sport }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="leagues-grid">
+    @for (league of filteredLeagues(); track league.idLeague) {
+    <app-league-card [league]="league" (leagueClick)="onLeagueClick($event)">
+    </app-league-card>
+    }
+  </div>
+
+  @if (showSeasonBadge() && selectedLeagueId()) {
+  <app-season-badge
+    [leagueId]="selectedLeagueId()!"
+    (close)="onCloseSeasonBadge()"
+  >
+  </app-season-badge>
+  }
+</div>

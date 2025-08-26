@@ -1,0 +1,27 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)" onkeypress="">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Season Badges</h2>
+      <button class="close-btn" (click)="close.emit()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      @if (seasons()) {
+        @if (seasons().length > 0) {
+          <div class="badges-grid">
+            @for (season of seasons(); track trackLeague(season, $index)) {
+              <div class="badge-item">
+                <img [src]="season.strBadge" [alt]="season.strSeason + ' badge'" class="badge-img">
+                <p class="season-name">{{ season.strSeason }}</p>
+              </div>
+            }
+          </div>
+        } @else {
+          <p class="no-badges">No season badges available for this league.</p>
+        }
+      } @else {
+        <div class="loading">Loading season badges...</div>
+      }
+    </div>
+  </div>
+</div>

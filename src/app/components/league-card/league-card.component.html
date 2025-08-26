@@ -1,0 +1,11 @@
+<div class="league-card" (click)="onLeagueClick()">
+  <div class="league-header">
+    <h3>{{ league().strLeague }}</h3>
+    <span class="sport-tag">{{ league().strSport }}</span>
+  </div>
+  <div class="league-details">
+    @if (league().strLeagueAlternate) {
+      <p class="alternate-name">{{ league().strLeagueAlternate }}</p>
+    }
+  </div>
+</div>
